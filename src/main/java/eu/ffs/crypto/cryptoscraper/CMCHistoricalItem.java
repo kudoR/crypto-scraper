@@ -3,6 +3,7 @@ package eu.ffs.crypto.cryptoscraper;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 
 @Entity
@@ -22,7 +23,8 @@ public class CMCHistoricalItem {
     }
 
     public String getDate() {
-        return pk.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        return sdf.format(pk.getDate());
     }
 
     public CMCHistoricalItemPK getPk() {

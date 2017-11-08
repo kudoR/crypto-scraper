@@ -13,9 +13,12 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -76,9 +79,15 @@ public class ImportData {
                         // date
                         Element dateElement = entryData.get(0);
                         String dateAsString = dateElement.text();
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.US);
-                        LocalDate dateTime = LocalDate.parse(dateAsString, formatter);
-                        cmcHistoricalItem.setPk(new CMCHistoricalItemPK(id, dateTime));
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+                    //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.US);
+                        try {
+                            Date dateAsUtilDate = sdf.parse(dateAsString);
+                            cmcHistoricalItem.setPk(new CMCHistoricalItemPK(id, new java.sql.Date(dateAsUtilDate.getTime())));
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
                         // open
                         Element openElement = entryData.get(1);

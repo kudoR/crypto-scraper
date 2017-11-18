@@ -5,11 +5,11 @@
 
     <groupId>eu.ffs.crypto</groupId>
     <artifactId>crypto-scraper</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>crypto-scraper</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Cryptodata Scraper</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -43,21 +43,6 @@ public class ImportData {
     private CryptoScraperRepository cryptoScraperRepository;
 
     @Scheduled(fixedRate = 60000L)
-    public void importGlobalItems() {
-        System.out.println("Running Import!");
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                GLOBAL_DATA_API_URL,
-                String.class
-        );
-        Gson gson = new Gson();
-        CMCGlobalItem[] cmcGlobalItems = gson.fromJson(response.getBody(), CMCGlobalItem[].class);
-
-        this.globalItems = Arrays.asList(cmcGlobalItems);
-
-        cmcGlobalItemRepository.save(globalItems);
-    }
-
-    @Scheduled(fixedRate = 60000L)
     public void importHistoricalItems() {
         CryptoScraperConfig config = cryptoScraperRepository.findOne(1);
         DateTimeFormatter API_PATTERN = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -66,6 +51,9 @@ public class ImportData {
         System.out.println("Last Update was: " + lastUpdate);
         if (!lastUpdate.equals(today)) {
             System.out.println("Performing Import!");
+
+            this.importGlobalItems();
+
             cmcGlobalItemRepository.getSymbols().stream().forEach(id -> {
                 try {
                     Document doc = Jsoup.connect(String.format(HISTORICAL_DATA_URL, id, lastUpdate, today)).get();
@@ -80,7 +68,7 @@ public class ImportData {
                         Element dateElement = entryData.get(0);
                         String dateAsString = dateElement.text();
                         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-                    //    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.US);
+
                         try {
                             Date dateAsUtilDate = sdf.parse(dateAsString);
                             cmcHistoricalItem.setPk(new CMCHistoricalItemPK(id, new java.sql.Date(dateAsUtilDate.getTime())));
@@ -137,5 +125,18 @@ public class ImportData {
             System.out.println("Last Import was today. Won't perform new Import.");
         }
 
+    }
+
+    private void importGlobalItems() {
+        ResponseEntity<String> response = restTemplate.getForEntity(
+                GLOBAL_DATA_API_URL,
+                String.class
+        );
+        Gson gson = new Gson();
+        CMCGlobalItem[] cmcGlobalItems = gson.fromJson(response.getBody(), CMCGlobalItem[].class);
+
+        this.globalItems = Arrays.asList(cmcGlobalItems);
+
+        cmcGlobalItemRepository.save(globalItems);
     }
 }

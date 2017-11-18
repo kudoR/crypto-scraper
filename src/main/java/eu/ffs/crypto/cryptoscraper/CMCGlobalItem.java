@@ -13,7 +13,8 @@ public class CMCGlobalItem {
     private String id; // 	"bitcoin"
     private String name;//	"Bitcoin"
     private String symbol;//	"BTC"
-    private int rank;//	"1"
+    @SerializedName("rank")
+    private int rankByCap;//	"1"
     private BigDecimal price_usd;//	"7504.49"
     private BigDecimal price_btc;//	"1.0"
     @SerializedName("24h_volume_usd")
@@ -54,11 +55,11 @@ public class CMCGlobalItem {
     }
 
     public int getRank() {
-        return rank;
+        return rankByCap;
     }
 
     public void setRank(int rank) {
-        this.rank = rank;
+        this.rankByCap = rank;
     }
 
     public BigDecimal getPrice_usd() {

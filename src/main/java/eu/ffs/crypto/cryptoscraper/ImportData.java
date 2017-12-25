@@ -67,11 +67,12 @@ public class ImportData {
                         // date
                         Element dateElement = entryData.get(0);
                         String dateAsString = dateElement.text();
-                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
 
                         try {
                             Date dateAsUtilDate = sdf.parse(dateAsString);
                             cmcHistoricalItem.setPk(new CMCHistoricalItemPK(id, new java.sql.Date(dateAsUtilDate.getTime())));
+
 
                         } catch (ParseException e) {
                             e.printStackTrace();

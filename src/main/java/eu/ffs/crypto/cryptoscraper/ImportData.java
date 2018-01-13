@@ -25,7 +25,7 @@ import java.util.Locale;
 @Component
 public class ImportData {
 
-    private String GLOBAL_DATA_API_URL = "https://api.coinmarketcap.com/v1/ticker/?limit=30";
+    private String GLOBAL_DATA_API_URL = "https://api.coinmarketcap.com/v1/ticker/?limit=100";
     private String HISTORICAL_DATA_URL = "https://coinmarketcap.com/currencies/%s/historical-data/?start=%s&end=%s"; // 20171031
     private List<CMCGlobalItem> globalItems;
     private List<CMCHistoricalItem> cmcHistoricalItems;
